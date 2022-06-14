@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def tiangle_middle(a):
     x=0
     y=0
@@ -15,12 +17,14 @@ def unique(a):
         if x not in tab:
             tab.append(x)
     return tab
+
 points = []
 with open('dane.txt','r') as file:
     file = file.read()
     points = file.split('\n')
 control = 0 # --------------
 field_number = int(points[0])   # number of fields
+fig,ax = plt.subplots(field_number)
 for tri_field in range(field_number): 
     print('field number',tri_field+1)
     control = control+1
@@ -35,9 +39,9 @@ for tri_field in range(field_number):
         for x in points[control].split():
             tab.append(int(x))
         poles_fields.append(tab)
+    print('poles_fields',poles_fields)
     tab=[]
     tab1=[]
-    tab2=[]
     for x in poles_fields:
         tab.append(distance(x,tiangle_middle(poles_fields)))
     for sorted_tab_value in sorted(unique(tab))[::-1]:
@@ -48,5 +52,13 @@ for tri_field in range(field_number):
         hold =[]
         for y in range(3):
             hold.append(tab1[x+y])
-        
         print(x/3+1,hold)
+        plotx=[]
+        ploty=[]
+        for y in hold:
+            plotx.append(poles_fields[y-1][0])
+            ploty.append(poles_fields[y-1][1])
+        plotx.append(plotx[0])
+        ploty.append(ploty[0])
+        ax[tri_field].plot(plotx,ploty)
+plt.show()
